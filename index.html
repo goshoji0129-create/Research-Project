@@ -53,29 +53,26 @@ const CATEGORIES = {
 };
 
 const ITEMS = [
-  { month: 0, cat: "submit", text: "SHE論文 投稿", date: "4/27", priority: "critical" },
+  { month: 0, cat: "submit", text: "Studies in Higher Education論文 投稿", date: "4/27", priority: "critical" },
   { month: 0, cat: "strategy", text: "2本目リジェクト時の転送先を特定", date: "4月中", priority: "critical" },
-  { month: 0, cat: "dissertation", text: "SHE・CS展望の理論的背骨を博論総合考察と突き合わせ", date: "4月中", priority: "high" },
+  { month: 0, cat: "dissertation", text: "Studies in Higher Education・『認知科学』展望の理論的背骨を博論総合考察と突き合わせ", date: "4月中", priority: "high" },
   { month: 1, cat: "submit", text: "JSSE共著資料 提出", date: "5/4", priority: "high" },
   { month: 1, cat: "submit", text: "JSET共著資料 提出", date: "5/18", priority: "high" },
-  { month: 1, cat: "submit", text: "CS展望論文 投稿", date: "5/25", priority: "critical" },
+  { month: 1, cat: "submit", text: "『認知科学』展望論文 投稿", date: "5/25", priority: "critical" },
   { month: 1, cat: "submit", text: "JSET共著論文 投稿", date: "5/31", priority: "high" },
   { month: 1, cat: "review", text: "2本目 査読結果確認（6週超なら編集委員に問い合わせ）", date: "5月上旬", priority: "critical" },
-  { month: 2, cat: "submit", text: "ILS論文 投稿", date: "6/29", priority: "critical" },
+  { month: 2, cat: "submit", text: "Information and Learning Sciences論文 投稿", date: "6/29", priority: "critical" },
   { month: 2, cat: "review", text: "3本目 採録決定を待つ（条件付き採録→確定見込み）", date: "6〜7月", priority: "high" },
-  { month: 2, cat: "strategy", text: "ICLS 2028 CFP確認・発表申請準備開始", date: "6月〜", priority: "medium" },
-  { month: 3, cat: "review", text: "SHE論文 査読結果（想定）→修正対応", date: "7月〜", priority: "high" },
-  { month: 3, cat: "strategy", text: "翻訳の3類型を国内学会（JSET/JSSE全国大会）で発表準備", date: "7月", priority: "medium" },
+  { month: 3, cat: "review", text: "Studies in Higher Education論文 査読結果（想定）→修正対応", date: "7月〜", priority: "high" },
   { month: 3, cat: "study", text: "情報幾何学の勉強再開（週2〜3h上限）", date: "7月〜", priority: "low" },
   { month: 4, cat: "review", text: "査読対応に集中（新規執筆は入れない）", date: "8月", priority: "high" },
   { month: 4, cat: "dissertation", text: "博論 総合考察の骨格執筆開始", date: "8月後半", priority: "high" },
   { month: 4, cat: "strategy", text: "Peppler・Keune等のSNS/CFPウォッチ継続", date: "通年", priority: "low" },
-  { month: 5, cat: "review", text: "CS展望論文 査読結果（想定）→修正対応", date: "9月〜", priority: "high" },
+  { month: 5, cat: "review", text: "『認知科学』展望論文 査読結果（想定）→修正対応", date: "9月〜", priority: "high" },
   { month: 5, cat: "dissertation", text: "博論 序章・各章の接続部分の執筆", date: "9月", priority: "high" },
-  { month: 5, cat: "writing", text: "LCSI論文 構想メモ作成（ILS再分析×理論フォーカス）", date: "9月", priority: "medium" },
+  { month: 5, cat: "writing", text: "Cognition and Instruction論文 構想メモ作成（Information and Learning Sciences再分析×理論フォーカス）", date: "9月", priority: "medium" },
   { month: 6, cat: "dissertation", text: "博論 各章（掲載済み論文）をストーリーラインに沿って再構成", date: "10月", priority: "critical" },
-  { month: 6, cat: "review", text: "ILS論文 査読結果（想定）→修正対応", date: "10月〜", priority: "high" },
-  { month: 6, cat: "strategy", text: "ICLS 2028 発表申請 提出", date: "10〜11月", priority: "medium" },
+  { month: 6, cat: "review", text: "Information and Learning Sciences論文 査読結果（想定）→修正対応", date: "10月〜", priority: "high" },
   { month: 7, cat: "dissertation", text: "博論 総合考察・結論の本格執筆", date: "11月", priority: "critical" },
   { month: 7, cat: "dissertation", text: "指導教員との博論ドラフト検討（1回目）", date: "11月中旬", priority: "critical" },
   { month: 8, cat: "dissertation", text: "博論 全体通読・整合性チェック・修正", date: "12月", priority: "critical" },
@@ -83,9 +80,9 @@ const ITEMS = [
   { month: 9, cat: "dissertation", text: "博論 最終修正・体裁整備", date: "1月上旬〜中旬", priority: "critical" },
   { month: 9, cat: "submit", text: "博士論文 提出", date: "1/31", priority: "critical" },
   { month: 10, cat: "dissertation", text: "口頭試問準備", date: "2月", priority: "high" },
-  { month: 10, cat: "writing", text: "LCSI論文 エピソード選定・分析設計", date: "2月〜", priority: "medium" },
+  { month: 10, cat: "writing", text: "Cognition and Instruction論文 エピソード選定・分析設計", date: "2月〜", priority: "medium" },
   { month: 11, cat: "strategy", text: "博士号取得（想定）", date: "3月", priority: "critical" },
-  { month: 11, cat: "writing", text: "LCSI論文 本格執筆開始", date: "3月〜", priority: "medium" },
+  { month: 11, cat: "writing", text: "Cognition and Instruction論文 本格執筆開始", date: "3月〜", priority: "medium" },
   { month: 11, cat: "strategy", text: "若手研究（科研費）申請書構想開始", date: "3月", priority: "high" },
 ];
 
@@ -101,8 +98,8 @@ const WARNINGS = [
     color: "#E67E22",
   },
   {
-    title: "JLS論文は博論後に回す",
-    text: "12月末の自己設定締切は外す。博論提出後の2027年2〜4月にLCSI向けとして再設計。",
+    title: "Jounrnal of the Learning Sciences論文は博論後に回す",
+    text: "12月末の自己設定締切は外す。博論提出後の2027年2〜4月にCognition and Instruction向けとして再設計。",
     color: "#3498DB",
   },
 ];
@@ -260,7 +257,7 @@ function App() {
         <br />
         <span style={{ fontWeight: 700 }}>方針：</span>
         <span style={{ marginLeft: 8 }}>
-          情報幾何学は7月以降に週2〜3h上限｜JLS→LCSI論文として博論後に再設計｜C&Iは若手研究の成果（2030〜31年）で投稿
+          情報幾何学は7月以降に週2〜3h上限｜Cognition and Instruction論文として博論後に再設計｜Jounrnal of the Learning Scienceは若手研究の成果（2030〜31年）で投稿
         </span>
       </div>
     </div>
