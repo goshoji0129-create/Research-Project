@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026年度 研究スケジュール</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState } = React;
+
+const MONTHS = [
+  { key: "apr", label: "4月", labelEn: "Apr" },
+  { key: "may", label: "5月", labelEn: "May" },
+  { key: "jun", label: "6月", labelEn: "Jun" },
+  { key: "jul", label: "7月", labelEn: "Jul" },
+  { key: "aug", label: "8月", labelEn: "Aug" },
+  { key: "sep", label: "9月", labelEn: "Sep" },
+  { key: "oct", label: "10月", labelEn: "Oct" },
+  { key: "nov", label: "11月", labelEn: "Nov" },
+  { key: "dec", label: "12月", labelEn: "Dec" },
+  { key: "jan", label: "1月", labelEn: "Jan" },
+  { key: "feb", label: "2月", labelEn: "Feb" },
+  { key: "mar", label: "3月", labelEn: "Mar" },
+];
+
+const PHASES = [
+  { id: 1, label: "第1期：弾を撃ち切る", months: [0, 1, 2], color: "#E74C3C" },
+  { id: 2, label: "第2期：査読対応バッファ", months: [3, 4, 5], color: "#3498DB" },
+  { id: 3, label: "第3期：博論統合・仕上げ", months: [6, 7, 8, 9, 10, 11], color: "#2ECC71" },
+];
+
+const CATEGORIES = {
+  submit: { label: "投稿・提出", color: "#E74C3C", bg: "#FDE8E8" },
+  review: { label: "査読対応", color: "#E67E22", bg: "#FEF3E2" },
+  writing: { label: "執筆", color: "#3498DB", bg: "#E8F4FD" },
+  dissertation: { label: "博論", color: "#8E44AD", bg: "#F3E8FD" },
+  strategy: { label: "戦略的行動", color: "#16A085", bg: "#E8F8F5" },
+  study: { label: "自己研鑽", color: "#7F8C8D", bg: "#F0F0F0" },
+};
+
+const ITEMS = [
+  { month: 0, cat: "submit", text: "SHE論文 投稿", date: "4/27", priority: "critical" },
+  { month: 0, cat: "strategy", text: "2本目リジェクト時の転送先を特定", date: "4月中", priority: "critical" },
+  { month: 0, cat: "dissertation", text: "SHE・CS展望の理論的背骨を博論総合考察と突き合わせ", date: "4月中", priority: "high" },
+  { month: 1, cat: "submit", text: "JSSE共著資料 提出", date: "5/4", priority: "high" },
+  { month: 1, cat: "submit", text: "JSET共著資料 提出", date: "5/18", priority: "high" },
+  { month: 1, cat: "submit", text: "CS展望論文 投稿", date: "5/25", priority: "critical" },
+  { month: 1, cat: "submit", text: "JSET共著論文 投稿", date: "5/31", priority: "high" },
+  { month: 1, cat: "review", text: "2本目 査読結果確認（6週超なら編集委員に問い合わせ）", date: "5月上旬", priority: "critical" },
+  { month: 2, cat: "submit", text: "ILS論文 投稿", date: "6/29", priority: "critical" },
+  { month: 2, cat: "review", text: "3本目 採録決定を待つ（条件付き採録→確定見込み）", date: "6〜7月", priority: "high" },
+  { month: 2, cat: "strategy", text: "ICLS 2028 CFP確認・発表申請準備開始", date: "6月〜", priority: "medium" },
+  { month: 3, cat: "review", text: "SHE論文 査読結果（想定）→修正対応", date: "7月〜", priority: "high" },
+  { month: 3, cat: "strategy", text: "翻訳の3類型を国内学会（JSET/JSSE全国大会）で発表準備", date: "7月", priority: "medium" },
+  { month: 3, cat: "study", text: "情報幾何学の勉強再開（週2〜3h上限）", date: "7月〜", priority: "low" },
+  { month: 4, cat: "review", text: "査読対応に集中（新規執筆は入れない）", date: "8月", priority: "high" },
+  { month: 4, cat: "dissertation", text: "博論 総合考察の骨格執筆開始", date: "8月後半", priority: "high" },
+  { month: 4, cat: "strategy", text: "Peppler・Keune等のSNS/CFPウォッチ継続", date: "通年", priority: "low" },
+  { month: 5, cat: "review", text: "CS展望論文 査読結果（想定）→修正対応", date: "9月〜", priority: "high" },
+  { month: 5, cat: "dissertation", text: "博論 序章・各章の接続部分の執筆", date: "9月", priority: "high" },
+  { month: 5, cat: "writing", text: "LCSI論文 構想メモ作成（ILS再分析×理論フォーカス）", date: "9月", priority: "medium" },
+  { month: 6, cat: "dissertation", text: "博論 各章（掲載済み論文）をストーリーラインに沿って再構成", date: "10月", priority: "critical" },
+  { month: 6, cat: "review", text: "ILS論文 査読結果（想定）→修正対応", date: "10月〜", priority: "high" },
+  { month: 6, cat: "strategy", text: "ICLS 2028 発表申請 提出", date: "10〜11月", priority: "medium" },
+  { month: 7, cat: "dissertation", text: "博論 総合考察・結論の本格執筆", date: "11月", priority: "critical" },
+  { month: 7, cat: "dissertation", text: "指導教員との博論ドラフト検討（1回目）", date: "11月中旬", priority: "critical" },
+  { month: 8, cat: "dissertation", text: "博論 全体通読・整合性チェック・修正", date: "12月", priority: "critical" },
+  { month: 8, cat: "dissertation", text: "指導教員との博論ドラフト検討（2回目）", date: "12月中旬", priority: "critical" },
+  { month: 9, cat: "dissertation", text: "博論 最終修正・体裁整備", date: "1月上旬〜中旬", priority: "critical" },
+  { month: 9, cat: "submit", text: "博士論文 提出", date: "1/31", priority: "critical" },
+  { month: 10, cat: "dissertation", text: "口頭試問準備", date: "2月", priority: "high" },
+  { month: 10, cat: "writing", text: "LCSI論文 エピソード選定・分析設計", date: "2月〜", priority: "medium" },
+  { month: 11, cat: "strategy", text: "博士号取得（想定）", date: "3月", priority: "critical" },
+  { month: 11, cat: "writing", text: "LCSI論文 本格執筆開始", date: "3月〜", priority: "medium" },
+  { month: 11, cat: "strategy", text: "若手研究（科研費）申請書構想開始", date: "3月", priority: "high" },
+];
+
+const WARNINGS = [
+  {
+    title: "最大リスク：7〜8月の査読集中砲火",
+    text: "SHE（7月頃）・既存2本の修正が同時に返る可能性。新規執筆を入れず、バッファとして確保。",
+    color: "#E74C3C",
+  },
+  {
+    title: "掲載条件：2本目の査読結果",
+    text: "6週超で編集委員に問い合わせ。リジェクト時の転送先は4月中に決定済みにする。",
+    color: "#E67E22",
+  },
+  {
+    title: "JLS論文は博論後に回す",
+    text: "12月末の自己設定締切は外す。博論提出後の2027年2〜4月にLCSI向けとして再設計。",
+    color: "#3498DB",
+  },
+];
+
+const priorityIcon = (p) => {
+  if (p === "critical") return "\u25C9";
+  if (p === "high") return "\u25CF";
+  if (p === "medium") return "\u25CB";
+  return "\u00B7";
+};
+
+function App() {
+  const [selectedPhase, setSelectedPhase] = useState(null);
+  const [selectedCat, setSelectedCat] = useState(null);
+
+  const filtered = ITEMS.filter((item) => {
+    if (selectedPhase !== null) {
+      const phase = PHASES.find((p) => p.id === selectedPhase);
+      if (!phase.months.includes(item.month)) return false;
+    }
+    if (selectedCat && item.cat !== selectedCat) return false;
+    return true;
+  });
+
+  const groupedByMonth = MONTHS.map((m, i) => ({
+    ...m,
+    items: filtered.filter((it) => it.month === i),
+    phase: PHASES.find((p) => p.months.includes(i)),
+  }));
+
+  return (
+    <div style={{
+      fontFamily: "'Noto Sans JP', 'Hiragino Sans', sans-serif",
+      maxWidth: 920, margin: "0 auto", padding: "24px 16px",
+      color: "#1a1a2e", background: "#fff",
+    }}>
+      <div style={{ marginBottom: 28 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", margin: 0, lineHeight: 1.3 }}>
+          2026年度 研究スケジュール
+        </h1>
+        <p style={{ fontSize: 13, color: "#6b7280", margin: "4px 0 0", lineHeight: 1.5 }}>
+          2027年1月 博士論文提出に向けたロードマップ
+        </p>
+      </div>
+
+      <div style={{ display: "flex", gap: 0, marginBottom: 20, borderRadius: 8, overflow: "hidden", border: "1px solid #e5e7eb" }}>
+        {PHASES.map((phase) => {
+          const isActive = selectedPhase === phase.id;
+          return (
+            <button key={phase.id} onClick={() => setSelectedPhase(isActive ? null : phase.id)}
+              style={{
+                flex: phase.months.length, padding: "10px 8px",
+                background: isActive ? phase.color : phase.color + "18",
+                color: isActive ? "#fff" : phase.color,
+                border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700,
+                transition: "all 0.2s", borderRight: "1px solid #e5e7eb",
+              }}>
+              {phase.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
+        {Object.entries(CATEGORIES).map(([key, cat]) => {
+          const isActive = selectedCat === key;
+          return (
+            <button key={key} onClick={() => setSelectedCat(isActive ? null : key)}
+              style={{
+                padding: "5px 12px", borderRadius: 20,
+                border: "1.5px solid " + cat.color,
+                background: isActive ? cat.color : "transparent",
+                color: isActive ? "#fff" : cat.color,
+                fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s",
+              }}>
+              {cat.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ marginBottom: 24 }}>
+        {WARNINGS.map((w, i) => (
+          <div key={i} style={{
+            display: "flex", gap: 12, padding: "10px 14px", marginBottom: 8,
+            borderRadius: 8, background: w.color + "0C", borderLeft: "3px solid " + w.color,
+          }}>
+            <span style={{ fontSize: 16, lineHeight: 1.4 }}>⚠</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: w.color, marginBottom: 2 }}>{w.title}</div>
+              <div style={{ fontSize: 12, color: "#4b5563", lineHeight: 1.5 }}>{w.text}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div>
+        {groupedByMonth.map((month, mi) => {
+          if (month.items.length === 0 && selectedCat) return null;
+          return (
+            <div key={month.key} style={{ display: "flex", gap: 0, borderBottom: "1px solid #f0f0f0", minHeight: 48 }}>
+              <div style={{
+                width: 72, minWidth: 72, padding: "12px 0",
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start",
+                borderRight: "3px solid " + (month.phase?.color || "#ddd"),
+              }}>
+                <span style={{ fontSize: 18, fontWeight: 800, color: month.phase?.color || "#999", lineHeight: 1 }}>{month.label}</span>
+                <span style={{ fontSize: 10, color: "#9ca3af", marginTop: 2 }}>{mi <= 8 ? "2026" : "2027"}</span>
+              </div>
+              <div style={{ flex: 1, padding: "8px 0 8px 16px" }}>
+                {month.items.length === 0 ? (
+                  <div style={{ fontSize: 12, color: "#d1d5db", padding: "8px 0", fontStyle: "italic" }}>—</div>
+                ) : (
+                  month.items.map((item, ii) => {
+                    const cat = CATEGORIES[item.cat];
+                    return (
+                      <div key={ii} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "5px 0" }}>
+                        <span style={{ color: cat.color, fontSize: 12, lineHeight: "20px", flexShrink: 0, width: 14, textAlign: "center" }}>
+                          {priorityIcon(item.priority)}
+                        </span>
+                        <span style={{
+                          fontSize: 10, fontWeight: 600, color: cat.color, background: cat.bg,
+                          padding: "2px 7px", borderRadius: 4, flexShrink: 0, lineHeight: "16px",
+                        }}>
+                          {cat.label}
+                        </span>
+                        <span style={{
+                          fontSize: 13, color: item.priority === "critical" ? "#1a1a2e" : "#374151",
+                          fontWeight: item.priority === "critical" ? 700 : 400, lineHeight: "20px", flex: 1,
+                        }}>
+                          {item.text}
+                        </span>
+                        <span style={{ fontSize: 11, color: "#9ca3af", flexShrink: 0, lineHeight: "20px", whiteSpace: "nowrap" }}>
+                          {item.date}
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{
+        marginTop: 20, padding: "12px 16px", background: "#f9fafb",
+        borderRadius: 8, fontSize: 11, color: "#6b7280", lineHeight: 1.7,
+      }}>
+        <span style={{ fontWeight: 700 }}>優先度：</span>
+        <span style={{ marginLeft: 8 }}>◉ 最重要</span>
+        <span style={{ marginLeft: 12 }}>● 重要</span>
+        <span style={{ marginLeft: 12 }}>○ 中</span>
+        <span style={{ marginLeft: 12 }}>· 低（余裕があれば）</span>
+        <br />
+        <span style={{ fontWeight: 700 }}>方針：</span>
+        <span style={{ marginLeft: 8 }}>
+          情報幾何学は7月以降に週2〜3h上限｜JLS→LCSI論文として博論後に再設計｜C&Iは若手研究の成果（2030〜31年）で投稿
+        </span>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
